@@ -241,4 +241,1468 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 .decorations { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
 .deco-item { position: absolute; font-size: 26px; opacity: 0; transform: scale(0) rotate(-20deg); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.3)); }
 .deco-item.show { opacity: 1; transform: scale(1) rotate(0deg); }
-.stage-clear-text { position: absolute; top: 40%; left: 50%;
+.stage-clear-text { position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); font-family: 'Press Start 2P', monospace; font-size: 20px; color: #ffe3a6; text-shadow: 3px 3px 0 #a76c99; pointer-events: none; z-index: 30; animation: popTitle 1.5s ease forwards; }
+@keyframes popTitle { 0% { opacity: 0; transform: translate(-50%, -20%) scale(0.5); } 30% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); } 70% { opacity: 1; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0; transform: translate(-50%, -80%) scale(1); } }
+
+/* ================= 7. 第三关（像素翻牌） ================= */
+#gamePage3 { background-color: #1a1229; background-image: linear-gradient(rgba(26, 18, 41, 0.9), rgba(26, 18, 41, 0.9)), repeating-linear-gradient(0deg, transparent, transparent 40px, #2b1a3e 40px, #2b1a3e 42px), repeating-linear-gradient(90deg, transparent, transparent 40px, #2b1a3e 40px, #2b1a3e 42px); }
+#gamePage3.active { display: flex; flex-direction: column; align-items: center; }
+#gameBoard3 { 
+  flex: 1; width: 100%; max-width: 500px;
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; 
+  padding: 10px; align-content: center; position: relative; 
+  margin: 0 auto;
+}
+.card { aspect-ratio: 3 / 4; position: relative; perspective: 1000px; cursor: pointer; transform: translateZ(0); }
+.card-inner { width: 100%; height: 100%; position: relative; transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
+.card.flipped .card-inner { transform: rotateY(180deg); }
+.card-front, .card-back { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 6px; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; box-shadow: inset -3px -3px 0 rgba(0,0,0,0.2), inset 3px 3px 0 rgba(255,255,255,0.4); }
+.card-back { background: #9d7bc1; border-color: #e5a9d2; font-size: 24px; color: #ffe2ef; background-image: repeating-linear-gradient(45deg, #9d7bc1 0 10px, #8a65b0 10px 20px); }
+.card-back::after { content: "✦"; font-family: 'Press Start 2P', monospace; text-shadow: 2px 2px 0 #60447a; }
+.card-front { background: #ffe2ef; border-color: #ffbddd; transform: rotateY(180deg); font-size: 28px; text-shadow: 2px 2px 0 rgba(0,0,0,0.1); }
+.card.matched .card-inner { animation: matchPop 0.5s ease; }
+.card.matched .card-front { background: #d6efff; border-color: #82cdf5; box-shadow: 0 0 10px #82cdf5, inset -3px -3px 0 rgba(0,0,0,0.1), inset 3px 3px 0 rgba(255,255,255,0.6); }
+@keyframes matchPop { 0% { transform: rotateY(180deg) scale(1); } 50% { transform: rotateY(180deg) scale(1.15); } 100% { transform: rotateY(180deg) scale(1); } }
+
+/* ================= 8. 第四关（拼图） ================= */
+#gamePage4 { background: #211735; }
+#gamePage4.active { display: flex; flex-direction: column; align-items: center; }
+#puzzleBoard {
+  width: 90vw; max-width: 340px; aspect-ratio: 1 / 1;
+  background: #302149; border: 4px solid #ffbddd; border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+  gap: 2px; padding: 2px; position: relative; overflow: hidden; margin: auto;
+}
+.puzzle-piece {
+  width: 100%; height: 100%;
+  background-size: 300% 300%; cursor: pointer; position: relative;
+  border: 1px solid rgba(255,255,255,0.2); transition: transform 0.2s, box-shadow 0.2s;
+}
+.puzzle-piece.selected { transform: scale(0.95); box-shadow: 0 0 15px #ffe3a6; z-index: 5; border-color: #ffe3a6; }
+#puzzleBoard.solved .puzzle-piece { border: none; box-shadow: none; cursor: default; }
+#puzzleBoard.solved { border-color: #ffe3a6; box-shadow: 0 0 30px #ffe3a6; }
+
+/* ================= 9. 生日星球（DIY蛋糕 & 信） ================= */
+#planetPage { background: #111; display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; position: absolute; top:0; left:0; overflow: hidden; transition: background 1s; }
+#planetPage.active { display: flex; animation: pageTurn .6s ease; }
+.planet-stars { position: absolute; inset: 0; z-index: 0; background-image: radial-gradient(#fff 1px, transparent 1px), radial-gradient(#bda3e6 1px, transparent 1px); background-size: 50px 50px, 80px 80px; background-position: 0 0, 25px 25px; opacity: 0.6; animation: twinkle 4s infinite alternate; }
+@keyframes twinkle { from { opacity: 0.4; } to { opacity: 0.8; } }
+
+#diyArea { position: relative; z-index: 10; width: 100%; max-width: 500px; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 1s; }
+.cake-wrapper { width: 260px; height: 190px; position: relative; margin-top: 10px; margin-bottom: 30px; filter: drop-shadow(0 8px 7px rgba(0,0,0,.4)); }
+.cake-wrapper::after { content: ""; position: absolute; bottom: -17px; left: -25px; width: 310px; height: 27px; background: linear-gradient(180deg,#fff0f6 0%,#ffc9df 65%,#e99cbd 100%); border-radius: 50%; box-shadow: inset 0 3px 0 rgba(255,255,255,.95), 0 10px 15px rgba(0,0,0,.5); border: 2px solid #fff7fb; z-index: 1; }
+.cake-body { position: absolute; left: 0; bottom: 9px; width: 260px; height: 91px; background: #f8d0bd; border-radius: 17px 17px 14px 14px; z-index: 2; overflow: visible; border: 3px solid #d49cb8; transition: background 0.3s; box-shadow: inset 9px 0 0 rgba(255,255,255,.35), inset -10px 0 0 rgba(0,0,0,.1); }
+.cake-top { position: absolute; z-index: 4; width: 158px; height: 65px; left: 51px; top: 27px; border: 3px solid #d49cb8; border-radius: 15px 15px 10px 10px; background: #f8d0bd; transition: background 0.3s; box-shadow: inset 7px 0 0 rgba(255,255,255,.35), inset -7px 0 0 rgba(0,0,0,.1); }
+.cream { position: absolute; left: -2px; top: -5px; width: calc(100% + 4px); height: 28px; background: #fff2df; transition: background 0.3s; border: 2px solid #fff8ef; border-radius: 15px 15px 12px 12px; box-shadow: 0 4px 0 #e8cdbd; z-index: 3; }
+.cake-top .cream { top: -7px; height: 22px; border-radius: 50% 50% 9px 9px; }
+.cream::before, .cream::after { content: ""; position: absolute; background: inherit; border-radius: 0 0 13px 13px; box-shadow: 0 3px 0 #e8cdbd; }
+.cake-body .cream::before { left: 23px; top: 16px; width: 24px; height: 29px; }
+.cake-body .cream::after { right: 29px; top: 15px; width: 20px; height: 39px; }
+.cake-top .cream::before { left: 22px; top: 9px; width: 17px; height: 25px; border-radius: 0 0 10px 10px; }
+.cake-top .cream::after { display: none; }
+.candle { position: absolute; z-index: 7; width: 10px; height: 34px; left: 125px; top: -8px; border: 2px solid #d58cac; border-radius: 3px; background: repeating-linear-gradient(135deg,#fff 0 5px,#f4a6c5 5px 9px); transition: opacity 0.5s; }
+.flame { position: absolute; width: 12px; height: 17px; left: -3px; top: -18px; background: #ffd36f; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 0 12px rgba(255,211,111,.65); transition: opacity 0.5s, transform 0.5s; animation: flicker 0.5s infinite alternate; }
+@keyframes flicker { from { transform: rotate(-45deg) scale(1); } to { transform: rotate(-45deg) scale(1.1); } }
+.decorations { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
+.deco-item { position: absolute; font-size: 22px; filter: drop-shadow(1px 2px 1px rgba(0,0,0,.3)); transition: 0.3s; }
+
+.controls { width: 100%; padding: 0 15px; display: flex; flex-direction: column; gap: 10px; }
+.control-group { background: rgba(48, 33, 73, 0.8); border: 2px solid #b28ac8; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 8px; align-items: center; }
+.control-title { font-size: 11px; color: #ffbddd; font-weight: bold; letter-spacing: 1px; }
+.options { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.opt-btn { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.3); transition: transform 0.1s; }
+.opt-btn:active { transform: scale(0.9); }
+.opt-btn.selected { border-color: #ffe3a6; box-shadow: 0 0 10px #ffe3a6; transform: scale(1.1); }
+#finishBtn { width: 90%; padding: 15px; background: #ffbddd; color: #503455; font-weight: bold; font-size: 16px; border: 3px solid #fff; border-radius: 10px; box-shadow: 0 5px 0 #a76c99; margin-top: 15px; margin-bottom: 20px; cursor: pointer; transition: 0.1s; }
+#finishBtn:active { transform: translateY(3px); box-shadow: 0 2px 0 #a76c99; }
+
+#wishArea { position: absolute; inset: 0; z-index: 50; background: rgba(17,17,17,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.8s; }
+#wishArea.show { opacity: 1; pointer-events: auto; }
+#wishArea h2 { font-size: 24px; color: #ffe4f1; text-shadow: 2px 2px #79518b; margin-bottom: 20px; }
+.blow-btn { padding: 15px 30px; background: #f3bddb; color: #503455; font-weight: bold; font-size: 16px; border-radius: 30px; box-shadow: 0 5px 0 #a76c99; border: 2px solid #fff; cursor: pointer; margin-top: 20px;}
+.blow-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #a76c99; }
+#micStatus { font-size: 12px; color: #ffbddd; margin-top: 15px; }
+
+#letterArea { position: absolute; inset: 0; z-index: 100; background: #111; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 1s; }
+#letterArea.show { opacity: 1; pointer-events: auto; }
+.envelope { width: 280px; height: 180px; background: #ffe2ef; position: relative; border-radius: 10px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); cursor: pointer; transition: transform 0.5s; display: flex; align-items: center; justify-content: center; border: 2px solid #ffbddd; }
+.envelope::before { content: ""; position: absolute; top: 0; left: 0; border-left: 140px solid transparent; border-right: 140px solid transparent; border-top: 90px solid #ffbddd; border-radius: 10px 10px 0 0; z-index: 2; transition: transform 0.5s; transform-origin: top; }
+.envelope.open::before { transform: rotateX(180deg); z-index: 1; }
+.envelope h3 { z-index: 3; color: #a3517f; font-size: 16px; font-weight: bold; margin-top: 40px; pointer-events: none;}
+.envelope-sub { position: absolute; bottom: 20px; font-size: 12px; color: #d58eae; z-index: 3;}
+
+.letter-paper { position: absolute; width: 88%; max-width: 360px; height: 75vh; max-height: 550px; background-color: #fffdf5; border-radius: 5px; padding: 30px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateY(50px) scale(0.9); opacity: 0; pointer-events: none; transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); overflow-y: auto; font-size: 15px; line-height: 32px; background-image: repeating-linear-gradient(transparent, transparent 31px, #ebd6d0 31px, #ebd6d0 32px); background-position: 0 30px; background-attachment: local; }
+.letter-paper.show { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+.letter-paper h3 { color: #a3517f; font-size: 16px; margin-bottom: 25px; text-align: center; letter-spacing: 1px;}
+.letter-text { color: #503455; font-family: "KaiTi", "STKaiti", "Microsoft YaHei", sans-serif; text-align: justify; white-space: pre-wrap; }
+.cursor { display: inline-block; width: 2px; height: 15px; background: #503455; animation: blink 0.8s infinite; vertical-align: middle; position: relative; top: -2px;}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ⭐ 阅后退出按钮 ⭐ */
+#exitLetterBtn {
+  display: none; width: 90%; max-width: 360px; margin: 20px auto 0;
+  padding: 15px; background: #ffbddd; color: #503455; font-weight: bold; font-size: 16px;
+  border: 3px solid #fff; border-radius: 10px; box-shadow: 0 5px 0 #a76c99;
+  cursor: pointer; transition: 0.5s; z-index: 110;
+}
+#exitLetterBtn.show { display: block; animation: fadeInBtn 0.8s ease; }
+#exitLetterBtn:active { transform: translateY(3px); box-shadow: 0 2px 0 #a76c99; }
+@keyframes fadeInBtn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+.firework { position: absolute; width: 4px; height: 4px; border-radius: 50%; pointer-events: none; z-index: 90; }
+
+/* ================= 刮刮乐 & 门票通用 ================= */
+.scratch-tip { font-size: 11px; color: #ffbddd; margin-bottom: 15px; text-shadow: 1px 1px 0 #000; font-weight: bold;}
+.scratch-container { display: flex; gap: 10px; margin: 10px 0 20px; flex-wrap: wrap; justify-content: center; animation: pageTurn 0.5s ease backwards; }
+.scratch-card { width: 90px; height: 120px; position: relative; border: 3px solid #fff; border-radius: 6px; overflow: hidden; box-shadow: 4px 4px 0 #170f24; background: #fff; }
+.scratch-content { position: absolute; inset: 0; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; background: #ffe2ef; color: #503455; z-index: 1; }
+.scratch-content .icon { font-size: 35px; margin-bottom: 8px; }
+.scratch-content .label { font-size: 11px; font-weight: bold; line-height: 1.4; }
+canvas { position: absolute; inset: 0; z-index: 2; cursor: crosshair; width: 100%; height: 100%; touch-action: none;}
+.scratch-card.revealed { animation: glow 1s ease-in-out infinite alternate; border-color: #ffe3a6; }
+@keyframes glow { from { box-shadow: 4px 4px 0 #170f24, 0 0 10px #ffbddd; } to { box-shadow: 4px 4px 0 #170f24, 0 0 25px #ffe3a6; } }
+
+.ticket-modal { position: fixed; inset: 0; z-index: 100; background: rgba(13,7,29,.95); display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: 0.5s; }
+.ticket-modal.show { opacity: 1; pointer-events: auto; }
+.ticket { width: 85%; max-width: 340px; background: linear-gradient(135deg, #fff2df, #ffe2ef); border: 4px solid #ffbddd; border-radius: 15px; padding: 30px 20px; text-align: center; color: #503455; position: relative; box-shadow: 0 15px 40px rgba(0,0,0,0.8); transform: scale(0.8) translateY(20px); transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.ticket-modal.show .ticket { transform: scale(1) translateY(0); }
+.ticket::before, .ticket::after { content: ""; position: absolute; top: 50%; width: 20px; height: 20px; background: #211735; border-radius: 50%; transform: translateY(-50%); }
+.ticket::before { left: -14px; border-right: 4px solid #ffbddd; }
+.ticket::after { right: -14px; border-left: 4px solid #ffbddd; }
+.ticket h2 { font-family: 'Press Start 2P', monospace; font-size: 14px; color: #a3517f; margin-bottom: 15px; line-height: 1.5; }
+.ticket .star-icon { font-size: 40px; margin: 10px 0; }
+.ticket h3 { font-size: 18px; margin-bottom: 10px; }
+.ticket p { font-size: 12px; line-height: 1.6; color: #76546d; margin-bottom: 20px; }
+
+/* ================= 弹窗 & toast (已修复高度和滚动) ================= */
+.modal { display: none; position: fixed; inset: 0; z-index: 200; padding: 18px; background: rgba(13,7,29,.9); align-items: center; justify-content: center; }
+.modal.show { display: flex; }
+.modal-window { 
+  width: 100%; max-width: 540px; background: #30204e; border: 3px solid #e5a9d2; box-shadow: 6px 6px 0 #100a20; text-align: center; 
+  position: relative; padding: 40px 20px 20px 20px; 
+  max-height: 85vh; 
+  overflow-y: auto; 
+  -webkit-overflow-scrolling: touch;
+}
+.modal-window h2 { color: #ffe0f1; font-size: 20px; margin-bottom: 15px;}
+.modal-window .close { 
+  position: absolute; 
+  top: 8px; 
+  right: 12px; 
+  border: none; 
+  background: rgba(0,0,0,0.2); 
+  border-radius: 50%; 
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  color: #ffd4ed; 
+  font-size: 24px; 
+  z-index: 10;
+}
+.memory-detail { padding: 15px 10px; border: 1px dashed #a780bb; color: #f3dfef; font-size: 12px; line-height: 2; text-align: left;}
+.toast { position: fixed; z-index: 300; bottom: 25px; left: 50%; transform: translateX(-50%); background: #56366e; border: 2px solid #f4b9dc; padding: 12px 18px; color: white; font-size: 12px; display: none; max-width: 85%; text-align: center; }
+.toast.show { display: block; animation: pageTurn .3s ease; }
+</style>
+</head>
+<body>
+
+<!-- ================= 1. 验证入口 ================= -->
+<section id="entryPage" class="page active star-background flex-page">
+  <div class="phone">
+    <div class="phone-camera"></div>
+    <div class="phone-screen">
+      <div class="english">A LITTLE BIRTHDAY ADVENTURE</div>
+      <div class="phone-decoration">☾ ✧</div>
+      <h1>时光验证</h1>
+      <p class="question">在开始这场冒险之前，<br>请回答一个只有我们知道的问题。<br><br>我们是在哪一年认识的？</p>
+      <div class="year-display" id="yearDisplay">----</div>
+      <div class="number-pad">
+        <button onclick="pressKey('1')">1</button><button onclick="pressKey('2')">2</button><button onclick="pressKey('3')">3</button>
+        <button onclick="pressKey('4')">4</button><button onclick="pressKey('5')">5</button><button onclick="pressKey('6')">6</button>
+        <button onclick="pressKey('7')">7</button><button onclick="pressKey('8')">8</button><button onclick="pressKey('9')">9</button>
+        <button class="special" onclick="clearYear()">清空</button><button onclick="pressKey('0')">0</button><button class="special" onclick="deleteYear()">⌫</button>
+      </div>
+      <button class="enter-button" onclick="checkYear()">确认，开启回忆 →</button>
+      <button class="reset-btn" onclick="clearAllData()">⚠️ 清空所有游戏进度</button>
+      <div class="phone-status" id="phoneStatus">等待输入中…… ♡</div>
+    </div>
+  </div>
+</section>
+
+<div id="successOverlay">
+  <div class="success-heart">💗</div>
+  <h2>UNLOCKED!</h2>
+  <p>答对啦！<br>属于我们的回忆，正在等待开启……</p>
+  <button onclick="goNext()">翻开下一页 ✦</button>
+</div>
+
+<!-- ================= 2. 游戏大厅 ================= -->
+<section id="guidePage" class="page star-background">
+  <div class="scroll-container">
+    <div class="guide">
+      <header class="hero">
+        <div class="hero-moon">☾</div>
+        <div class="pixel-en">WELCOME TO OUR LITTLE UNIVERSE</div>
+        <h1>欢迎来到我们的小小宇宙！</h1>
+        <p>今天，你是这个宇宙里最闪亮的主角。<br>准备好开启属于你的生日冒险了吗？</p>
+        <div class="hero-stars">✦ ⋆ ✧ ⋆ ✦</div>
+      </header>
+
+      <section class="panel birthday-panel">
+        <div class="label">♡ YOUR SPECIAL DAY ♡</div>
+        <p>距离你的生日还有</p>
+        <div class="countdown" id="countdown">
+          <div><strong id="days">00</strong><small>天</small></div><span>:</span>
+          <div><strong id="hours">00</strong><small>小时</small></div><span>:</span>
+          <div><strong id="minutes">00</strong><small>分钟</small></div><span>:</span>
+          <div><strong id="seconds">00</strong><small>秒</small></div>
+        </div>
+        <p class="birthday-note" id="birthdayNote">11月10日 · 属于你的特别日子</p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">✦ 冒险进度 ✦</h2>
+        <div class="stats">
+          <div class="panel stat"><span>🎮</span><strong id="gameProgress">0/4</strong><small>冒险关卡</small></div>
+          <div class="panel stat"><span>🎟️</span><strong id="scratchProgress">0/12</strong><small>已获得刮刮乐</small></div>
+          <div class="panel stat"><span>🎁</span><strong id="giftProgress">0/6</strong><small>已发现礼物</small></div>
+          <div class="panel stat clickable" onclick="openBlessingModal()">
+            <span>💌</span><strong id="blessingProgress">0/3</strong><small>收到祝福 (点我查看)</small>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">✦ 选择你的冒险 ✦</h2>
+        <div class="game-list">
+          <button class="game-card unlocked" id="stage1" onclick="openAdventure(1)">
+            <div class="game-icon" id="icon1">♡</div>
+            <div class="game-info"><small>STAGE 01</small><strong>爱心收集员</strong><span>收集掉落的爱心，小心躲开炸弹！</span></div>
+            <span class="arrow">▶</span>
+          </button>
+          <button class="game-card locked" id="stage2" onclick="openAdventure(2)">
+            <div class="game-icon" id="icon2">🎂</div>
+            <div class="game-info"><small>STAGE 02</small><strong>甜蜜蛋糕师</strong><span>戳破彩色泡泡，装饰生日蛋糕！</span></div>
+            <span class="arrow">🔒</span>
+          </button>
+          <button class="game-card locked" id="stage3" onclick="openAdventure(3)">
+            <div class="game-icon" id="icon3">🃏</div>
+            <div class="game-info"><small>STAGE 03</small><strong>记忆翻牌</strong><span>找到八组相同的图案，考验记忆力！</span></div>
+            <span class="arrow">🔒</span>
+          </button>
+          <button class="game-card locked" id="stage4" onclick="openAdventure(4)">
+            <div class="game-icon" id="icon4">📷</div>
+            <div class="game-info"><small>FINAL STAGE</small><strong>拼起我们的合照</strong><span>把散落的回忆拼在一起，领取星球门票！</span></div>
+            <span class="arrow">🔒</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">✦ 这里还有一些小惊喜 ✦</h2>
+        <div class="extra-grid">
+          <button class="extra-card" onclick="openCollection()"><span>🎀</span><strong>我的收藏</strong><small>看看已经收集的礼物</small></button>
+          <button class="extra-card" onclick="openTimeline()"><span>📖</span><strong>友情时间轴</strong><small>翻翻我们一起走过的日子</small></button>
+        </div>
+      </section>
+
+      <section class="music">
+        <button id="musicButton" onclick="toggleMusic()">♫ 开启背景音乐</button>
+        <audio id="backgroundMusic" loop preload="none"></audio>
+        <p>一首歌，陪你开启这场小小冒险。</p>
+      </section>
+      <footer class="footer">MADE WITH LOVE ♡ JUST FOR YOU<p>我们的故事，还在继续。</p></footer>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. 友情时间轴 ================= -->
+<section id="timelinePage" class="page star-background">
+  <div class="scroll-container">
+    <div class="timeline-page-inner">
+      <button class="timeline-back" onclick="closeTimelinePage()">← 返回大厅</button>
+      <header class="timeline-hero">
+        <div class="pixel-en">OUR LITTLE MEMORIES</div>
+        <h1>我们的时光胶囊</h1>
+        <p>那些一起走过的日子，<br>被小心的收在每一张拍立得里。</p>
+        <div class="hero-stars" style="color:#ffdda4; margin-top:18px; letter-spacing:9px; font-size:12px;">✦ ⋆ ✧ ⋆ ✦</div>
+      </header>
+      <div class="timeline-axis" id="timelineAxis"></div>
+      <div style="text-align:center; color:#ffdda4; letter-spacing:10px; font-size:13px; margin-top:10px;">✦ ⋆ ✧ ⋆ ✦</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. 第一关 ================= -->
+<section id="gamePage1" class="page star-background flex-page">
+  <div class="game-topbar">
+    <div class="score-box">SCORE: <span id="scoreDisplay1">0</span></div>
+    <div class="time-box">TIME: <span id="timeDisplay1">60</span>s</div>
+  </div>
+  <div id="gameArea1">
+    <div id="basket">🧺</div>
+    <div class="overlay" id="startOverlay1">
+      <div class="pixel-title">LOVE CATCHER</div>
+      <p>移动小篮子，接住掉落的爱心吧！<br>接到爱心 +20 分，炸弹 -5 分。<br><br>🖱️ 电脑：移动鼠标 / 键盘左右键<br>📱 手机：滑动屏幕</p>
+      <button class="btn" onclick="startGame1()">开始游戏 ♡</button>
+      <button class="btn" style="background:#58376f; color:#fff; box-shadow:none; margin-top:10px;" onclick="quitGame1()">← 退出返回大厅</button>
+    </div>
+    <div class="overlay hidden" id="endOverlay1">
+      <div class="pixel-title">TIME'S UP!</div>
+      <p>你的最终得分：<span id="finalScore1" style="color:#ffe0a6; font-size:20px; font-weight:bold;">0</span></p>
+      <p style="color:#ffbfe1; margin-bottom: 5px;">恭喜获得 3 张神秘刮刮乐！<br>用手指或鼠标刮开涂层吧✨</p>
+      <p class="scratch-tip">🎁 神秘礼物请回群里兑换哦～</p>
+      <div class="scratch-container" id="scratchContainer1"></div>
+      <button class="btn hidden" id="backToHallBtn1" onclick="finishGameAndReturn(1)">收下礼物，返回大厅 ✦</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. 第二关 ================= -->
+<section id="gamePage2" class="page star-background flex-page">
+  <div class="game-topbar" style="justify-content: center;">
+    <div class="task-box" id="taskBox">
+      请戳破 <b id="targetCount">3</b> 个 <b id="targetColor" style="color:#ff9cc4;">粉色</b> 泡泡
+    </div>
+  </div>
+  <div id="bubbleArea">
+    <div class="overlay" id="startOverlay2">
+      <div class="pixel-title">SWEET CAKE</div>
+      <p>戳破指定颜色的泡泡，<br>为我们的生日蛋糕做装饰吧！<br><br>🖱️ 电脑 / 📱 手机：直接点击泡泡</p>
+      <button class="btn" onclick="startGame2()">开始制作 ♡</button>
+      <button class="btn" style="background:#58376f; color:#fff; box-shadow:none; margin-top:10px;" onclick="quitGame2()">← 退出返回大厅</button>
+    </div>
+    <div class="overlay hidden" id="endOverlay2">
+      <div class="pixel-title">CAKE READY!</div>
+      <p>你的生日蛋糕制作完成啦！<br>恭喜获得 3 张神秘刮刮乐！</p>
+      <p class="scratch-tip">🎁 神秘礼物请回群里兑换哦～</p>
+      <div class="scratch-container" id="scratchContainer2"></div>
+      <button class="btn hidden" id="backToHallBtn2" onclick="finishGameAndReturn(2)">收下礼物，返回大厅 ✦</button>
+    </div>
+  </div>
+  <div class="cake-area">
+    <div class="cake">
+      <div class="cake-body">
+        <div class="cake-cream"></div>
+        <span class="cake-pearl p1"></span><span class="cake-pearl p2"></span>
+        <span class="cake-pearl p3"></span><span class="cake-pearl p4"></span>
+        <span class="cake-pearl p5"></span><span class="cake-pearl p6"></span>
+      </div>
+      <div class="cake-top-tier"></div>
+      <div class="cake-candle"></div>
+      <span class="cake-strawberry left">🍓</span>
+      <span class="cake-strawberry right">🍓</span>
+      <div class="decorations" id="decorations"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. 第三关 ================= -->
+<section id="gamePage3" class="page star-background flex-page">
+  <div class="game-topbar">
+    <div class="score-box">PAIRS: <span id="pairsDisplay">0/8</span></div>
+    <div class="score-box">MOVES: <span id="movesDisplay">0</span></div>
+  </div>
+  <div id="gameBoard3">
+    <div class="overlay" id="startOverlay3">
+      <div class="pixel-title">MEMORY MATCH</div>
+      <p>翻开卡片，找到 8 组相同的图案。<br>考验记忆力的时候到啦！<br><br>🖱️ 电脑 / 📱 手机：直接点击卡片</p>
+      <button class="btn" onclick="startGame3()">开始挑战 ♡</button>
+      <button class="btn" style="background:#58376f; color:#fff; box-shadow:none; margin-top:10px;" onclick="quitGame3()">← 退出返回大厅</button>
+    </div>
+    <div class="overlay hidden" id="endOverlay3">
+      <div class="pixel-title">ALL MATCHED!</div>
+      <p>太棒了！你完成了记忆挑战！</p>
+      <p class="scratch-tip">🎁 神秘礼物请回群里兑换哦～</p>
+      <div class="scratch-container" id="scratchContainer3"></div>
+      <button class="btn hidden" id="backToHallBtn3" onclick="finishGameAndReturn(3)">收下礼物，返回大厅 ✦</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. 第四关（拼图） ================= -->
+<section id="gamePage4" class="page star-background flex-page">
+  <div class="game-topbar">
+    <div class="score-box">STEPS: <span id="stepsDisplay">0</span></div>
+  </div>
+  <div id="puzzleBoard"></div>
+  <div class="overlay" id="startOverlay4">
+    <div class="pixel-title">OUR MEMORIES</div>
+    <p>把散落的回忆拼在一起吧！<br>点击两块拼图可以交换位置。</p>
+    <button class="btn" onclick="startGame4()">开始拼图 ♡</button>
+    <button class="btn" style="background:#58376f; color:#fff; box-shadow:none; margin-top:10px;" onclick="quitGame4()">← 退出返回大厅</button>
+  </div>
+</section>
+
+<!-- 门票弹窗 -->
+<div class="ticket-modal" id="ticketModal">
+  <div class="ticket">
+    <h2>CONGRATULATIONS!</h2>
+    <div class="star-icon">🎟️</div>
+    <h3>Your Ticket to Birthday Planet</h3>
+    <p>恭喜你完成所有冒险！<br>现在，属于你的生日星球即将开启。</p>
+    <button class="btn" onclick="enterPlanet()">进入生日星球 ✦</button>
+  </div>
+</div>
+
+<!-- ================= 8. 生日星球（终极） ================= -->
+<section id="planetPage">
+  <div class="planet-stars"></div>
+  <div id="diyArea">
+    <div class="cake-wrapper" id="cakeVisual">
+      <div class="cake-body" id="cakeBase">
+        <div class="cream" id="creamBottom"></div>
+      </div>
+      <div class="cake-top" id="cakeTop">
+        <div class="cream" id="creamTop"></div>
+      </div>
+      <div class="candle" id="candleVisual">
+        <div class="flame" id="flame"></div>
+      </div>
+      <div class="decorations" id="decorLayer"></div>
+    </div>
+
+    <div class="controls">
+      <div class="control-group">
+        <span class="control-title">蛋糕底色</span>
+        <div class="options" id="optBase"></div>
+      </div>
+      <div class="control-group">
+        <span class="control-title">奶油口味</span>
+        <div class="options" id="optCream"></div>
+      </div>
+      <div class="control-group">
+        <span class="control-title">加一点装饰</span>
+        <div class="options" id="optDeco"></div>
+      </div>
+      <div class="control-group">
+        <span class="control-title">选择蜡烛</span>
+        <div class="options" id="optCandle"></div>
+      </div>
+    </div>
+
+    <button id="finishBtn" onclick="goToWish()">完成我的蛋糕 ✨</button>
+  </div>
+
+  <div id="wishArea">
+    <h2>许个愿望吧</h2>
+    <p style="color:#ffbddd; font-size:14px; margin-bottom:30px;">听说对着生日蛋糕许愿，一定会实现哦～</p>
+    <button class="blow-btn" onclick="blowCandle()">吹灭蜡烛 🎂</button>
+    <p id="micStatus">（也可以直接点击按钮吹灭）</p>
+  </div>
+
+  <div id="letterArea">
+    <div class="envelope" id="envelope" onclick="openLetter()">
+      <h3>To My Dearest Friend</h3>
+      <div class="envelope-sub">点击拆开信封 💌</div>
+    </div>
+    <div class="letter-paper" id="letterPaper">
+      <h3>致楚钰姐的一封信 💌</h3>
+      <div class="letter-text" id="letterText"></div><span class="cursor" id="cursor"></span>
+    </div>
+    <button id="exitLetterBtn" onclick="exitToHall()">收下祝福，返回大厅 ✦</button>
+  </div>
+</section>
+
+<!-- ================= 弹窗区 ================= -->
+<div class="modal" id="collectionModal" onclick="closeOutside(event,'collectionModal')">
+  <div class="modal-window">
+    <button class="close" onclick="closeModal('collectionModal')">×</button>
+    <div class="pixel-en">MY TREASURE BOX</div>
+    <h2>我的收藏盒</h2>
+    <div class="memory-detail" id="collectionContent">还没有收集到礼物哦，继续冒险吧！</div>
+  </div>
+</div>
+
+<div class="modal" id="blessingModal" onclick="closeOutside(event,'blessingModal')">
+  <div class="modal-window">
+    <button class="close" onclick="closeModal('blessingModal')">×</button>
+    <div class="pixel-en">BIRTHDAY BLESSINGS</div>
+    <h2>收到的生日祝福</h2>
+    <div class="memory-detail" id="blessingContent" style="text-align: left; font-size: 14px; line-height: 2.2;">还没有收集到祝福哦，去玩游戏吧！</div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* =========================
+   配置与初始化
+========================= */
+const CONFIG = {
+  correctYear: "2021",
+  birthdayMonth: 11,
+  birthdayDay: 10,
+  musicPath: "assets/birthday-music.mp3",
+  puzzleImage: "assets/photo.jpg",
+  timeline: [
+    { id: "beginning", year: "2021", english: "THE BEGINNING", text: "高中相识，一切故事的开始。", photos: ["assets/p1.jpg"] },
+    { id: "golden", year: "2024–2025", english: "OUR GOLDEN DAYS", text: "从真正熟络到越来越亲密。剧本杀、日常相聚、春节的美好回忆，都收在这一章。", photos: ["assets/p2.jpg", "assets/p3.jpg", "assets/p4.jpg"] },
+    { id: "journey", year: "2025 SUMMER", english: "A LITTLE JOURNEY", text: "长沙与武汉，一起出发、一起留下的旅行记忆。", photos: ["assets/p5.jpg", "assets/p6.jpg"] },
+    { id: "still", year: "2026 SUMMER", english: "STILL TOGETHER", text: "今年暑假的照片，记录我们又一次相聚。", photos: ["assets/p7.jpg", "assets/p8.jpg"] },
+    { id: "tbc", year: "TO BE CONTINUED", english: "未完待续", type: "polaroid-blank", photo: "assets/p9.jpg", enQuote: "There are still so many memories waiting for us.", zhQuote: "还有好多故事，等着我们一起写。 💌" }
+  ],
+  giftsList: [
+    { id: 'g1_1', icon: '🎁', name: '神秘礼物 1' },
+    { id: 'g1_2', icon: '🎁', name: '神秘礼物 2' },
+    { id: 'g2_1', icon: '🎁', name: '神秘礼物 3' },
+    { id: 'g2_2', icon: '🎁', name: '神秘礼物 4' },
+    { id: 'g3_1', icon: '🎁', name: '神秘礼物 5' },
+    { id: 'g3_2', icon: '🎁', name: '神秘礼物 6' },
+  ],
+  blessingsList: [
+    { id: 'b1_1', name: '楚钰姐，生日快乐！新的一岁，希望你每天都有好心情，吃到喜欢的美食，遇见有趣的人，收到意想不到的小惊喜。希望你永远有很多喜欢的事情可以去做，有很多想去的地方可以出发。生活不一定每天都有大事发生，但希望那些平凡的小日子，也能被快乐填满。祝我们楚钰姐永远漂亮，永远开心！' },
+    { id: 'b2_1', name: '⭐ 第二张｜未来可期\n\n楚钰姐，希望新的一岁，你想要的都能慢慢实现，努力的事情都有好结果。希望你有勇气去尝试新的事物，也有底气去选择自己真正喜欢的生活。遇到困难的时候不要太为难自己，偶尔停下来休息也没关系。人生还有那么多有趣的事情等着我们去体验，希望未来的你，眼里有光，心里有爱，脚下有路。' },
+    { id: 'b3_1', name: '💌 第三张｜我们的故事\n\n楚钰姐，很高兴这些年有你在我的生活里。从以前到现在，我们一起留下了好多照片，也积攒了好多只有我们才懂的回忆。时间过得真的很快，好像昨天还是从前的模样，转眼间大家都在慢慢长大。希望未来的日子里，我们还能一起去很多地方，看不同的风景，拍很多好看的照片，把平凡的日子过成值得珍藏的回忆。愿我们一直有机会见面，也一直有新的故事可以分享！' }
+  ]
+};
+
+// DIY 蛋糕配置
+const BASES = [
+  { id: 'pink', color: '#f8d0bd', name: '粉色' },
+  { id: 'purple', color: '#d1b3e0', name: '紫色' },
+  { id: 'gold', color: '#fbe4b2', name: '香槟金' },
+  { id: 'white', color: '#eaf4f4', name: '薄荷白' }
+];
+const CREAMS = [
+  { id: 'strawberry', color: '#fff2df', name: '草莓奶油' },
+  { id: 'vanilla', color: '#fffdf6', name: '香草奶油' },
+  { id: 'choco', color: '#a56a5a', name: '巧克力奶油' }
+];
+const DECOS = [
+  { id: 'strawberry', icon: '🍓', name: '草莓' },
+  { id: 'heart', icon: '💖', name: '爱心' },
+  { id: 'star', icon: '⭐', name: '星星' },
+  { id: 'bow', icon: '🎀', name: '蝴蝶结' }
+];
+const CANDLES = [
+  { id: 'normal', css: 'repeating-linear-gradient(135deg,#fff 0 5px,#f4a6c5 5px 9px)', name: '普通蜡烛' },
+  { id: 'number', css: 'repeating-linear-gradient(135deg,#ffe3a6 0 5px,#ffbddd 5px 9px)', name: '数字蜡烛' },
+  { id: 'star', css: 'repeating-linear-gradient(135deg,#d6efff 0 5px,#82cdf5 5px 9px)', name: '星星蜡烛' }
+];
+
+const FINAL_LETTER = `亲爱的楚钰姐：
+
+生日快乐呀！
+
+准备这个小小的生日惊喜，
+其实是想在这个特别的日子里，
+给你留下一点不一样的回忆。
+虽然只是一个小小的网页，
+里面也没有什么特别贵重的礼物，
+但每一张照片、每一句祝福，
+都是我们认真挑选、认真准备的。
+
+回头看看，好像有很多值得纪念
+的瞬间都被我们悄悄收藏了起来。
+那些一起度过的日子、拍下的照片，
+还有许多想起来就会忍不住笑
+的小事，都让平凡的生活格外有趣。
+很开心能够成为彼此生活中的一部分，
+也很开心能有这样一个机会，
+认认真真地为你庆祝生日。
+
+新的一岁，希望楚钰姐继续漂亮，
+继续快乐，想做的事情都能顺利实现，
+想去的地方都能有机会抵达。
+希望你既能享受热热闹闹的生活，
+也能拥有安安静静属于自己的时光。
+遇到开心的事情就尽情分享，
+遇到烦恼也别忘了身边还有朋友。
+
+最后，祝我们的楚钰姐生日快乐！
+愿往后的每一年，都有新的惊喜、
+新的风景和新的故事。
+今天一定要开开心心的，
+因为今天的主角是你！
+
+—— 来自两个认真准备惊喜的人`;
+
+
+/* =========================
+   数据存档管理
+========================= */
+function getProgress() { return JSON.parse(localStorage.getItem("birthdayProgress") || "{}"); }
+function saveProgress(data) { localStorage.setItem("birthdayProgress", JSON.stringify(data)); }
+
+function clearAllData() {
+  if(confirm("确定要清空所有游戏进度、已刮开的礼物和祝福吗？此操作不可逆！")) {
+    localStorage.removeItem("birthdayProgress");
+    showToast("所有进度已清空！");
+    enteredYear = ""; renderYear();
+  }
+}
+
+function updateGuideProgress() {
+  const data = getProgress();
+  const completed = data.completedGames || [];
+  const scratched = data.scratchedCards || [];
+  const gifts = data.collectedGifts || [];
+  const blessings = data.blessings || [];
+
+  document.getElementById("gameProgress").textContent = `${completed.length}/4`;
+  document.getElementById("scratchProgress").textContent = `${scratched.length}/12`;
+  document.getElementById("giftProgress").textContent = `${gifts.length}/6`;
+  document.getElementById("blessingProgress").textContent = `${blessings.length}/3`;
+
+  for (let i = 1; i <= 4; i++) {
+    const card = document.getElementById("stage" + i);
+    const icon = document.getElementById("icon" + i);
+    const unlocked = i === 1 || completed.includes(i - 1);
+    const cleared = completed.includes(i);
+    card.classList.toggle("unlocked", unlocked);
+    card.classList.toggle("locked", !unlocked);
+    icon.classList.toggle("cleared", cleared);
+    card.querySelector(".arrow").textContent = cleared ? "✓" : (unlocked ? "▶" : "🔒");
+  }
+}
+
+/* =========================
+   页面切换与倒计时
+========================= */
+function goNext() {
+  document.getElementById("successOverlay").classList.remove("show");
+  document.getElementById("entryPage").classList.remove("active");
+  document.getElementById("guidePage").classList.add("active");
+  updateGuideProgress();
+}
+
+function openAdventure(stage) {
+  const data = getProgress();
+  const completed = data.completedGames || [];
+  if (stage > 1 && !completed.includes(stage - 1)) {
+    showToast("先完成上一段冒险吧 ♡");
+    return;
+  }
+  document.getElementById("guidePage").classList.remove("active");
+  if (stage === 1) {
+    document.getElementById("gamePage1").classList.add("active");
+    resetGameUI1();
+  } else if (stage === 2) {
+    document.getElementById("gamePage2").classList.add("active");
+    resetGameUI2();
+  } else if (stage === 3) {
+    document.getElementById("gamePage3").classList.add("active");
+    resetGameUI3();
+  } else if (stage === 4) {
+    document.getElementById("gamePage4").classList.add("active");
+    resetGameUI4();
+  }
+}
+
+function quitGame1() { isPlaying1 = false; cancelAnimationFrame(animationId1); document.getElementById("gamePage1").classList.remove("active"); document.getElementById("guidePage").classList.add("active"); updateGuideProgress(); }
+function quitGame2() { isPlaying2 = false; clearInterval(spawnTimer2); document.getElementById("gamePage2").classList.remove("active"); document.getElementById("guidePage").classList.add("active"); updateGuideProgress(); }
+function quitGame3() { isPlaying3 = false; document.getElementById("gamePage3").classList.remove("active"); document.getElementById("guidePage").classList.add("active"); updateGuideProgress(); }
+function quitGame4() { document.getElementById("gamePage4").classList.remove("active"); document.getElementById("guidePage").classList.add("active"); updateGuideProgress(); }
+
+function updateCountdown() {
+  const now = new Date();
+  let target = new Date(now.getFullYear(), CONFIG.birthdayMonth - 1, CONFIG.birthdayDay);
+  const isBirthday = now.getMonth() === CONFIG.birthdayMonth - 1 && now.getDate() === CONFIG.birthdayDay;
+  if (isBirthday) {
+    document.getElementById("countdown").innerHTML = "<strong style='color:#ffe0a6;font-size:18px;'>HAPPY BIRTHDAY!</strong>";
+    document.getElementById("birthdayNote").textContent = "今天，整个宇宙都为你闪耀！♡";
+    return;
+  }
+  if (now > target) target = new Date(now.getFullYear() + 1, CONFIG.birthdayMonth - 1, CONFIG.birthdayDay);
+  const distance = target - now;
+  document.getElementById("days").textContent = String(Math.floor(distance / 86400000)).padStart(2, "0");
+  document.getElementById("hours").textContent = String(Math.floor(distance / 3600000) % 24).padStart(2, "0");
+  document.getElementById("minutes").textContent = String(Math.floor(distance / 60000) % 60).padStart(2, "0");
+  document.getElementById("seconds").textContent = String(Math.floor(distance / 1000) % 60).padStart(2, "0");
+}
+updateCountdown(); setInterval(updateCountdown, 1000);
+
+/* =========================
+   密码验证
+========================= */
+let enteredYear = "";
+let isChecking = false;
+function renderYear() { document.getElementById("yearDisplay").textContent = enteredYear.padEnd(4, "-"); }
+function pressKey(n) { if (!isChecking && enteredYear.length < 4) { enteredYear += n; renderYear(); document.getElementById("phoneStatus").textContent = "继续输入哦…… ♡"; } }
+function clearYear() { if (!isChecking) { enteredYear = ""; renderYear(); } }
+function deleteYear() { if (!isChecking) { enteredYear = enteredYear.slice(0, -1); renderYear(); } }
+function checkYear() {
+  if (isChecking) return;
+  const status = document.getElementById("phoneStatus");
+  if (enteredYear.length !== 4) { status.textContent = "还没输入完整哦！"; return; }
+  if (enteredYear === CONFIG.correctYear) {
+    isChecking = true; status.textContent = "验证成功！";
+    document.getElementById("successOverlay").classList.add("show");
+    createCelebration();
+  } else {
+    status.textContent = "好像不太对哦，再想想！♡";
+    enteredYear = ""; renderYear();
+  }
+}
+function createCelebration() {
+  const overlay = document.getElementById("successOverlay");
+  for (let i = 0; i < 20; i++) {
+    const s = document.createElement("span");
+    s.textContent = ["✦","♡","✧"][Math.floor(Math.random()*3)];
+    s.style.cssText = `position:absolute; left:${Math.random()*100}%; top:${Math.random()*100}%; color:#ffd6ec; font-size:${20+Math.random()*20}px; pointer-events:none;`;
+    overlay.appendChild(s);
+    s.animate([{ transform: "scale(0)", opacity: 0 }, { transform: "scale(1.5)", opacity: 1 }, { transform: "scale(0)", opacity: 0 }], { duration: 2000, iterations: Infinity });
+  }
+}
+document.addEventListener("keydown", e => {
+  if (!document.getElementById("entryPage").classList.contains("active")) return;
+  if (/^[0-9]$/.test(e.key)) pressKey(e.key);
+  if (e.key === "Backspace") deleteYear();
+  if (e.key === "Enter") checkYear();
+});
+
+/* =========================
+   收藏、祝福弹窗及时间轴
+========================= */
+function openCollection() {
+  const data = getProgress();
+  const gifts = data.collectedGifts || [];
+  const blessings = data.blessings || [];
+  let html = '';
+  if (gifts.length === 0 && blessings.length === 0) {
+    html = `<p>🎀 这里暂时还是空空的。</p><p>完成小游戏，收集你的第一份惊喜吧！</p>`;
+  } else {
+    if(gifts.length > 0) {
+      html += `<p style="color:#ffe0a6; margin-bottom:8px;">✨ 已经找到的礼物：</p>`;
+      gifts.forEach(id => {
+        const g = CONFIG.giftsList.find(x => x.id === id);
+        if(g) html += `<div style="display:flex; align-items:center; gap:10px; margin-bottom:5px;"><span style="font-size:20px;">${g.icon}</span> <span>${g.name}</span></div>`;
+      });
+    }
+    if(blessings.length > 0) {
+      html += `<p style="color:#ffbddd; margin-top:15px; margin-bottom:8px;">💌 收到的生日祝福：</p>`;
+      blessings.forEach(id => {
+        const b = CONFIG.blessingsList.find(x => x.id === id);
+        if(b) html += `<p style="margin-bottom:5px;">· ${b.name}</p>`;
+      });
+    }
+  }
+  document.getElementById("collectionContent").innerHTML = html;
+  document.getElementById("collectionModal").classList.add("show");
+}
+
+function openBlessingModal() {
+  const data = getProgress();
+  const blessings = data.blessings || [];
+  let html = '';
+  if (blessings.length === 0) {
+    html = `<p style="text-align:center;">还没有收到祝福哦，去完成冒险吧！♡</p>`;
+  } else {
+    blessings.forEach(id => {
+      const b = CONFIG.blessingsList.find(x => x.id === id);
+      if(b) {
+        html += `<div style="background: rgba(255,255,255,0.05); padding: 15px; margin-bottom: 10px; border-radius: 5px; border-left: 4px solid #ffbddd; text-align: justify;">${b.name.replace(/\n/g, '<br>')}</div>`;
+      }
+    });
+  }
+  document.getElementById("blessingContent").innerHTML = html;
+  document.getElementById("blessingModal").classList.add("show");
+}
+function closeModal(id) { document.getElementById(id).classList.remove("show"); }
+function closeOutside(e, id) { if (e.target.id === id) closeModal(id); }
+
+function openTimeline() {
+  document.getElementById("guidePage").classList.remove("active");
+  document.getElementById("timelinePage").classList.add("active");
+  renderTimeline();
+  document.querySelector("#timelinePage .scroll-container").scrollTop = 0;
+}
+function closeTimelinePage() {
+  document.getElementById("timelinePage").classList.remove("active");
+  document.getElementById("guidePage").classList.add("active");
+}
+function renderTimeline() {
+  const axis = document.getElementById("timelineAxis");
+  axis.innerHTML = CONFIG.timeline.map(ch => {
+    if (ch.type === "polaroid-blank") {
+      return `
+        <div class="tl-chapter tbc">
+          <div class="tl-card">
+            <div class="tl-year-row"><span class="tl-year">${ch.year}</span><span class="tl-en">${ch.english}</span></div>
+            <div class="tl-blank-photo"><img src="${ch.photo}" onerror="this.style.display='none'"></div>
+            <p class="tl-tbc-en">${ch.enQuote}</p>
+            <p class="tl-tbc-zh">${ch.zhQuote}</p>
+          </div>
+        </div>
+      `;
+    }
+    const photosHtml = (ch.photos || []).map(src => `<div class="tl-photo"><img src="${src}" onerror="this.parentNode.classList.add('placeholder'); this.parentNode.innerHTML='还没有放入照片';"></div>`).join("");
+    const photosClass = (ch.photos || []).length > 1 ? "multi" : "";
+    return `
+      <div class="tl-chapter">
+        <div class="tl-card">
+          <div class="tl-year-row"><span class="tl-year">${ch.year}</span><span class="tl-en">${ch.english}</span></div>
+          <div class="tl-photos ${photosClass}">${photosHtml}</div>
+          <p class="tl-text">${ch.text}</p>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  const chapters = document.querySelectorAll(".tl-chapter");
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add("visible"); io.unobserve(entry.target); } });
+  }, { threshold: 0.15 });
+  chapters.forEach(el => io.observe(el));
+}
+
+/* =========================
+   背景音乐
+========================= */
+let musicPlaying = false;
+function toggleMusic() {
+  const audio = document.getElementById("backgroundMusic");
+  const button = document.getElementById("musicButton");
+  if (!audio.src) audio.src = CONFIG.musicPath;
+  if (musicPlaying) { audio.pause(); musicPlaying = false; button.textContent = "♫ 开启背景音乐"; }
+  else { audio.play().then(() => { musicPlaying = true; button.textContent = "♫ 关闭背景音乐"; }).catch(() => showToast("音乐暂时无法播放")); }
+}
+
+/* =========================
+   通用刮刮乐生成器
+========================= */
+function createScratchCards(container, cardsData, onAllRevealed) {
+  container.innerHTML = '';
+  let revealedCount = 0;
+
+  cardsData.forEach(cardData => {
+    const card = document.createElement('div');
+    card.className = 'scratch-card';
+    const content = document.createElement('div');
+    content.className = 'scratch-content';
+    let icon = cardData.type === 'gift' ? '🎁' : '💌';
+    content.innerHTML = `<div class="icon">${icon}</div><div class="label">${cardData.label}</div>`;
+    
+    const canvas = document.createElement('canvas');
+    canvas.width = 90; canvas.height = 120;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffbddd'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '16px Arial'; ctx.fillStyle = '#fff'; ctx.textAlign = 'center';
+    for(let i=0; i<6; i++) ctx.fillText('✦', Math.random()*90, Math.random()*120);
+    ctx.font = 'bold 40px "Press Start 2P", monospace'; ctx.fillStyle = '#a76c99'; ctx.fillText('?', 45, 75);
+
+    let isDrawing = false;
+    let hasRevealed = false;
+    
+    const getPos = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const cx = e.touches ? e.touches[0].clientX : e.clientX;
+      const cy = e.touches ? e.touches[0].clientY : e.clientY;
+      return { x: cx - rect.left, y: cy - rect.top };
+    };
+
+    const scratch = (e) => {
+      if (!isDrawing || hasRevealed) return;
+      if (e.cancelable) e.preventDefault();
+      const pos = getPos(e);
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath(); ctx.arc(pos.x, pos.y, 15, 0, Math.PI * 2); ctx.fill();
+
+      if (!hasRevealed) {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let transparentPixels = 0;
+        for (let i = 3; i < imageData.data.length; i += 4) {
+          if (imageData.data[i] < 128) transparentPixels++;
+        }
+        if (transparentPixels > (canvas.width * canvas.height * 0.45)) {
+          hasRevealed = true;
+          canvas.style.pointerEvents = 'none'; canvas.style.opacity = '0'; canvas.style.transition = 'opacity 0.5s';
+          card.classList.add('revealed');
+          saveCardToLocal(cardData);
+          revealedCount++;
+          if (revealedCount === 3) onAllRevealed();
+        }
+      }
+    };
+
+    canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
+    canvas.addEventListener('mousemove', (e) => { scratch(e); });
+    window.addEventListener('mouseup', () => { isDrawing = false; });
+    canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); }, {passive: false});
+    canvas.addEventListener('touchmove', (e) => { scratch(e); }, {passive: false});
+    window.addEventListener('touchend', () => { isDrawing = false; });
+
+    card.appendChild(content); card.appendChild(canvas);
+    container.appendChild(card);
+  });
+}
+
+function saveCardToLocal(cardData) {
+  let progress = getProgress();
+  let scratched = progress.scratchedCards || [];
+  if (!scratched.includes(cardData.id)) scratched.push(cardData.id);
+  progress.scratchedCards = scratched;
+  
+  if (cardData.type === 'gift') {
+    let gifts = progress.collectedGifts || [];
+    if (!gifts.includes(cardData.id)) gifts.push(cardData.id);
+    progress.collectedGifts = gifts;
+  } else if (cardData.type === 'blessing') {
+    let blessings = progress.blessings || [];
+    if (!blessings.includes(cardData.id)) blessings.push(cardData.id);
+    progress.blessings = blessings;
+  }
+  saveProgress(progress);
+}
+
+function finishGameAndReturn(gameId) {
+  let progress = getProgress();
+  if (gameId === 1) progress.score = (progress.score || 0) + score1;
+  let completed = progress.completedGames || [];
+  if (!completed.includes(gameId)) completed.push(gameId);
+  progress.completedGames = completed;
+  saveProgress(progress);
+
+  document.getElementById(`gamePage${gameId}`).classList.remove("active");
+  document.getElementById("guidePage").classList.add("active");
+  updateGuideProgress();
+}
+
+let toastTimer;
+function showToast(msg) {
+  const toast = document.getElementById("toast");
+  toast.textContent = msg; toast.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
+/* ========================================
+   第一关：爱心收集员
+======================================== */
+const gameArea1 = document.getElementById('gameArea1');
+const basket = document.getElementById('basket');
+const scoreDisplay1 = document.getElementById('scoreDisplay1');
+const timeDisplay1 = document.getElementById('timeDisplay1');
+const finalScore1 = document.getElementById('finalScore1');
+const startOverlay1 = document.getElementById('startOverlay1');
+const endOverlay1 = document.getElementById('endOverlay1');
+const scratchContainer1 = document.getElementById('scratchContainer1');
+const backToHallBtn1 = document.getElementById('backToHallBtn1');
+
+const GAME_DURATION = 60, SCORE_HEART = 20, SCORE_BOMB = -5;
+let isPlaying1 = false, timeLeft1 = GAME_DURATION, score1 = 0, basketX = 0, maxBasketX = 0;
+let animationId1 = null, lastTime1 = 0, spawnTimer1 = 0, items1 = [];
+let keys1 = { ArrowLeft: false, ArrowRight: false, KeyA: false, KeyD: false };
+
+function initBasketPos() { maxBasketX = gameArea1.offsetWidth - basket.offsetWidth; basketX = maxBasketX / 2; basket.style.left = basketX + 'px'; }
+function resetGameUI1() {
+  startOverlay1.classList.remove('hidden'); endOverlay1.classList.add('hidden');
+  document.querySelectorAll('.item, .popup-text').forEach(el => el.remove());
+  items1 = []; initBasketPos(); score1 = 0; timeLeft1 = GAME_DURATION;
+  scoreDisplay1.textContent = score1; timeDisplay1.textContent = timeLeft1;
+}
+function startGame1() {
+  startOverlay1.classList.add('hidden');
+  score1 = 0; timeLeft1 = GAME_DURATION;
+  scoreDisplay1.textContent = score1; timeDisplay1.textContent = timeLeft1;
+  document.querySelectorAll('.item, .popup-text').forEach(el => el.remove());
+  items1 = []; spawnTimer1 = 0; isPlaying1 = true; lastTime1 = performance.now();
+  requestAnimationFrame(gameLoop1);
+}
+function gameLoop1(timestamp) {
+  if (!isPlaying1) return;
+  const deltaTime = timestamp - lastTime1; lastTime1 = timestamp;
+  timeLeft1 -= deltaTime / 1000;
+  if (timeLeft1 <= 0) { timeLeft1 = 0; timeDisplay1.textContent = '0'; endGame1(); return; }
+  timeDisplay1.textContent = Math.ceil(timeLeft1);
+
+  const moveSpeed = 0.5 * deltaTime;
+  if (keys1.ArrowLeft || keys1.KeyA) basketX -= moveSpeed;
+  if (keys1.ArrowRight || keys1.KeyD) basketX += moveSpeed;
+  basketX = Math.max(0, Math.min(basketX, maxBasketX)); basket.style.left = basketX + 'px';
+
+  spawnTimer1 += deltaTime;
+  const currentInterval = Math.max(300, 700 - (GAME_DURATION - timeLeft1) * 5);
+  if (spawnTimer1 > currentInterval) { spawnItem1(); spawnTimer1 = 0; }
+
+  const basketRect = basket.getBoundingClientRect(); const areaRect = gameArea1.getBoundingClientRect();
+  const catchZoneTop = basketRect.top + 10; const catchZoneBottom = basketRect.bottom;
+  for (let i = items1.length - 1; i >= 0; i--) {
+    let item = items1[i]; item.y += item.speed * (deltaTime / 16); item.el.style.top = item.y + 'px';
+    const ix = item.x, iy = item.y, iw = item.el.offsetWidth, ih = item.el.offsetHeight;
+    if (iy > areaRect.height) { item.el.remove(); items1.splice(i, 1); continue; }
+    if (iy + ih > catchZoneTop && iy < catchZoneBottom && ix + iw > basketX && ix < basketX + basket.offsetWidth) {
+      handleCatch1(item); item.el.remove(); items1.splice(i, 1);
+    }
+  }
+  animationId1 = requestAnimationFrame(gameLoop1);
+}
+function spawnItem1() {
+  const isBomb = Math.random() < 0.25; const isStar = !isBomb && Math.random() < 0.15;
+  let char = '💖', type = 'heart';
+  if (isBomb) { char = '💣'; type = 'bomb'; } else if (isStar) { char = '⭐'; type = 'star'; }
+  const el = document.createElement('div'); el.className = 'item'; el.textContent = char;
+  const x = Math.random() * (gameArea1.offsetWidth - 40); el.style.left = x + 'px'; el.style.top = '-50px';
+  gameArea1.appendChild(el); items1.push({ el: el, x: x, y: -50, speed: 3 + Math.random() * 3, type: type });
+}
+function handleCatch1(item) {
+  if (item.type === 'heart') { score1 += SCORE_HEART; showPopup1('+20', '#ffb9dc', item.x, item.y); }
+  else if (item.type === 'bomb') { score1 += SCORE_BOMB; showPopup1('-5', '#ff6b6b', item.x, item.y); gameArea1.classList.add('shake'); setTimeout(() => gameArea1.classList.remove('shake'), 300); }
+  else if (item.type === 'star') { showPopup1('✨', '#ffe0a6', item.x, item.y); }
+  if (score1 < 0) score1 = 0; scoreDisplay1.textContent = score1;
+}
+function showPopup1(text, color, x, y) {
+  const popup = document.createElement('div'); popup.className = 'popup-text'; popup.textContent = text;
+  popup.style.color = color; popup.style.left = x + 'px'; popup.style.top = (y - 20) + 'px';
+  gameArea1.appendChild(popup); setTimeout(() => popup.remove(), 600);
+}
+function endGame1() {
+  isPlaying1 = false; cancelAnimationFrame(animationId1);
+  finalScore1.textContent = score1; backToHallBtn1.classList.add('hidden');
+  const CARDS_DATA1 = [
+    { type: 'gift', id: 'g1_1', label: '神秘礼物' },
+    { type: 'gift', id: 'g1_2', label: '神秘礼物' },
+    { type: 'blessing', id: 'b1_1', label: '生日祝福' }
+  ];
+  createScratchCards(scratchContainer1, CARDS_DATA1, () => { backToHallBtn1.classList.remove('hidden'); });
+  endOverlay1.classList.remove('hidden');
+}
+document.addEventListener('keydown', e => { if (e.key in keys1) keys1[e.key] = true; });
+document.addEventListener('keyup', e => { if (e.key in keys1) keys1[e.key] = false; });
+gameArea1.addEventListener('mousemove', e => { if (!isPlaying1) return; const rect = gameArea1.getBoundingClientRect(); basketX = (e.clientX - rect.left) - (basket.offsetWidth / 2); });
+gameArea1.addEventListener('touchstart', handleTouch1, { passive: false });
+gameArea1.addEventListener('touchmove', handleTouch1, { passive: false });
+function handleTouch1(e) { if (!isPlaying1) return; e.preventDefault(); const touch = e.touches[0]; const rect = gameArea1.getBoundingClientRect(); basketX = (touch.clientX - rect.left) - (basket.offsetWidth / 2); }
+window.addEventListener('resize', initBasketPos); initBasketPos();
+
+/* ========================================
+   第二关：甜蜜蛋糕师
+======================================== */
+const STAGES = [
+  { color: 'pink', hex: '#ff9cc4', name: '粉色', deco: '🍓', decoPos: [{x: 20, y: 45}, {x: 90, y: 55}, {x: 170, y: 40}] },
+  { color: 'yellow', hex: '#ffdb7d', name: '黄色', deco: '⭐', decoPos: [{x: 40, y: 70}, {x: 120, y: 80}, {x: 180, y: 60}] },
+  { color: 'blue', hex: '#82cdf5', name: '蓝色', deco: '💙', decoPos: [{x: 60, y: 25}, {x: 130, y: 30}, {x: 160, y: 15}] }
+];
+const TARGET_PER_STAGE = 3;
+const bubbleArea = document.getElementById('bubbleArea');
+const taskBox = document.getElementById('taskBox');
+const targetCount = document.getElementById('targetCount');
+const targetColor = document.getElementById('targetColor');
+const decorations = document.getElementById('decorations');
+const startOverlay2 = document.getElementById('startOverlay2');
+const endOverlay2 = document.getElementById('endOverlay2');
+const scratchContainer2 = document.getElementById('scratchContainer2');
+const backToHallBtn2 = document.getElementById('backToHallBtn2');
+
+let currentStage = 0, currentCount = 0, isPlaying2 = false, spawnTimer2 = null;
+
+function updateTaskUI() {
+  if (currentStage >= STAGES.length) return;
+  const stage = STAGES[currentStage];
+  targetCount.textContent = TARGET_PER_STAGE - currentCount;
+  targetColor.textContent = stage.name; targetColor.style.color = stage.hex;
+  taskBox.classList.remove('flash'); void taskBox.offsetWidth; taskBox.classList.add('flash');
+}
+function resetGameUI2() {
+  startOverlay2.classList.remove('hidden'); endOverlay2.classList.add('hidden');
+  isPlaying2 = false; currentStage = 0; currentCount = 0;
+  decorations.innerHTML = ''; bubbleArea.querySelectorAll('.bubble, .pop-particle').forEach(el => el.remove());
+  clearInterval(spawnTimer2);
+}
+function startGame2() {
+  startOverlay2.classList.add('hidden');
+  isPlaying2 = true; currentStage = 0; currentCount = 0;
+  decorations.innerHTML = ''; bubbleArea.querySelectorAll('.bubble, .pop-particle').forEach(el => el.remove());
+  updateTaskUI();
+  clearInterval(spawnTimer2); spawnTimer2 = setInterval(spawnBubble2, 600);
+}
+function spawnBubble2() {
+  if (!isPlaying2) return;
+  const colorTypes = ['pink', 'yellow', 'blue'];
+  const targetType = STAGES[currentStage].color;
+  let colorType = (Math.random() < 0.45) ? targetType : colorTypes[Math.floor(Math.random() * colorTypes.length)];
+  const bubble = document.createElement('div'); bubble.className = `bubble ${colorType}`;
+  const size = 45 + Math.random() * 25; bubble.style.width = size + 'px'; bubble.style.height = size + 'px';
+  const areaRect = bubbleArea.getBoundingClientRect();
+  const x = Math.random() * (areaRect.width - size); const y = Math.random() * (areaRect.height - size - 20);
+  bubble.style.left = x + 'px'; bubble.style.top = y + 'px';
+  bubble.style.animationDelay = (Math.random() * -3) + 's'; bubble.style.animationDuration = (2 + Math.random() * 2) + 's';
+
+  bubble.onclick = (e) => {
+    e.stopPropagation(); if (!isPlaying2) return;
+    if (colorType === targetType) {
+      popBubble2(bubble, e.offsetX, e.offsetY, true);
+      currentCount++;
+      if (currentCount >= TARGET_PER_STAGE) stageComplete2(); else updateTaskUI();
+    } else {
+      bubble.style.transform = 'translateX(-5px)'; setTimeout(() => bubble.style.transform = 'translateX(5px)', 50); setTimeout(() => bubble.style.transform = 'translateX(0)', 100);
+    }
+  };
+  bubbleArea.appendChild(bubble);
+}
+function popBubble2(bubbleEl, offsetX, offsetY, isCorrect) {
+  const rect = bubbleEl.getBoundingClientRect(); const areaRect = bubbleArea.getBoundingClientRect();
+  const absX = rect.left - areaRect.left + offsetX; const absY = rect.top - areaRect.top + offsetY;
+  bubbleEl.remove();
+  if (isCorrect) {
+    for (let i = 0; i < 5; i++) {
+      const p = document.createElement('div'); p.className = 'pop-particle';
+      const s = 10 + Math.random() * 15; p.style.width = s + 'px'; p.style.height = s + 'px';
+      p.style.left = (absX - s/2) + 'px'; p.style.top = (absY - s/2) + 'px';
+      p.style.animationDelay = (i * 0.02) + 's'; bubbleArea.appendChild(p); setTimeout(() => p.remove(), 500);
+    }
+  }
+}
+function stageComplete2() {
+  const stage = STAGES[currentStage];
+  const clearText = document.createElement('div'); clearText.className = 'stage-clear-text'; clearText.textContent = `${stage.name}完成!`;
+  bubbleArea.appendChild(clearText); setTimeout(() => clearText.remove(), 1500);
+  stage.decoPos.forEach((pos, index) => {
+    setTimeout(() => {
+      const deco = document.createElement('div'); deco.className = 'deco-item show'; deco.textContent = stage.deco;
+      deco.style.left = pos.x + 'px'; deco.style.top = pos.y + 'px'; decorations.appendChild(deco);
+    }, index * 200);
+  });
+  bubbleArea.querySelectorAll('.bubble').forEach(el => el.remove()); currentCount = 0; currentStage++;
+  
+  if (currentStage >= STAGES.length) {
+    isPlaying2 = false; clearInterval(spawnTimer2);
+    setTimeout(() => {
+      endOverlay2.classList.remove('hidden'); backToHallBtn2.classList.add('hidden');
+      const CARDS_DATA2 = [
+        { type: 'gift', id: 'g2_1', label: '神秘礼物' },
+        { type: 'gift', id: 'g2_2', label: '神秘礼物' },
+        { type: 'blessing', id: 'b2_1', label: '生日祝福' }
+      ];
+      createScratchCards(scratchContainer2, CARDS_DATA2, () => { backToHallBtn2.classList.remove('hidden'); });
+    }, 1500);
+  } else {
+    setTimeout(() => { if(isPlaying2) updateTaskUI(); }, 1000);
+  }
+}
+
+/* ========================================
+   第三关：记忆翻牌
+======================================== */
+const ICONS3 = ['🎂', '💖', '🎁', '🎈', '🧸', '⭐', '🎀', '🕯️'];
+const TOTAL_PAIRS3 = 8;
+const gameBoard3 = document.getElementById('gameBoard3');
+const pairsDisplay3 = document.getElementById('pairsDisplay');
+const movesDisplay3 = document.getElementById('movesDisplay');
+const startOverlay3 = document.getElementById('startOverlay3');
+const endOverlay3 = document.getElementById('endOverlay3');
+const scratchContainer3 = document.getElementById('scratchContainer3');
+const backToHallBtn3 = document.getElementById('backToHallBtn3');
+
+let cardsData3 = [], firstCard3 = null, secondCard3 = null;
+let isLocked3 = false, matchedPairs3 = 0, moves3 = 0, isPlaying3 = false;
+
+function startGame3() {
+  startOverlay3.classList.add('hidden'); endOverlay3.classList.add('hidden');
+  cardsData3 = [...ICONS3, ...ICONS3]; shuffleArray3(cardsData3);
+  firstCard3 = null; secondCard3 = null; isLocked3 = false; matchedPairs3 = 0; moves3 = 0;
+  pairsDisplay3.textContent = `0/${TOTAL_PAIRS3}`; movesDisplay3.textContent = moves3;
+  gameBoard3.querySelectorAll('.card').forEach(el => el.remove());
+  
+  cardsData3.forEach((icon, index) => {
+    const card = document.createElement('div'); card.className = 'card';
+    card.dataset.icon = icon; card.dataset.index = index;
+    card.innerHTML = `<div class="card-inner"><div class="card-back"></div><div class="card-front">${icon}</div></div>`;
+    card.addEventListener('click', () => flipCard3(card));
+    gameBoard3.insertBefore(card, startOverlay3);
+  });
+  isPlaying3 = true;
+}
+function shuffleArray3(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+function flipCard3(card) {
+  if (!isPlaying3 || isLocked3 || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  card.classList.add('flipped');
+  if (!firstCard3) { firstCard3 = card; }
+  else { secondCard3 = card; isLocked3 = true; moves3++; movesDisplay3.textContent = moves3; checkMatch3(); }
+}
+function checkMatch3() {
+  const icon1 = firstCard3.dataset.icon, icon2 = secondCard3.dataset.icon;
+  if (icon1 === icon2) {
+    setTimeout(() => {
+      firstCard3.classList.add('matched'); secondCard3.classList.add('matched');
+      resetBoard3(); matchedPairs3++; pairsDisplay3.textContent = `${matchedPairs3}/${TOTAL_PAIRS3}`;
+      if (matchedPairs3 === TOTAL_PAIRS3) { setTimeout(endGame3, 800); }
+    }, 500);
+  } else {
+    setTimeout(() => { firstCard3.classList.remove('flipped'); secondCard3.classList.remove('flipped'); resetBoard3(); }, 800);
+  }
+}
+function resetBoard3() { firstCard3 = null; secondCard3 = null; isLocked3 = false; }
+function resetGameUI3() {
+  startOverlay3.classList.remove('hidden'); endOverlay3.classList.add('hidden');
+  gameBoard3.querySelectorAll('.card').forEach(el => el.remove());
+  isPlaying3 = false;
+}
+function endGame3() {
+  isPlaying3 = false;
+  endOverlay3.classList.remove('hidden'); backToHallBtn3.classList.add('hidden');
+  const CARDS_DATA3 = [
+    { type: 'gift', id: 'g3_1', label: '神秘礼物' },
+    { type: 'gift', id: 'g3_2', label: '神秘礼物' },
+    { type: 'blessing', id: 'b3_1', label: '生日祝福' }
+  ];
+  createScratchCards(scratchContainer3, CARDS_DATA3, () => { backToHallBtn3.classList.remove('hidden'); });
+}
+
+/* ========================================
+   第四关：拼图
+======================================== */
+const puzzleBoard = document.getElementById('puzzleBoard');
+const stepsDisplay = document.getElementById('stepsDisplay');
+const startOverlay4 = document.getElementById('startOverlay4');
+const ticketModal = document.getElementById('ticketModal');
+let selectedPiece = null;
+let steps4 = 0;
+
+function startGame4() {
+  startOverlay4.classList.add('hidden');
+  initPuzzle();
+}
+function resetGameUI4() {
+  puzzleBoard.innerHTML = '';
+  startOverlay4.classList.remove('hidden');
+  ticketModal.classList.remove('show');
+  stepsDisplay.textContent = '0';
+  selectedPiece = null;
+  steps4 = 0;
+}
+function initPuzzle() {
+  puzzleBoard.innerHTML = '';
+  puzzleBoard.classList.remove('solved');
+  selectedPiece = null;
+  steps4 = 0;
+  stepsDisplay.textContent = steps4;
+
+  let indices = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  do { indices.sort(() => Math.random() - 0.5); } while (isSolved(indices));
+
+  indices.forEach((pieceIndex) => {
+    const el = document.createElement('div');
+    el.className = 'puzzle-piece';
+    el.dataset.index = pieceIndex;
+    
+    const row = Math.floor(pieceIndex / 3);
+    const col = pieceIndex % 3;
+    el.style.backgroundImage = `url('${CONFIG.puzzleImage}')`;
+    el.style.backgroundPosition = `${col * 50}% ${row * 50}%`;
+    
+    el.onclick = () => handlePieceClick(el);
+    puzzleBoard.appendChild(el);
+  });
+}
+function handlePieceClick(el) {
+  if (puzzleBoard.classList.contains('solved')) return;
+  if (!selectedPiece) {
+    selectedPiece = el; el.classList.add('selected');
+  } else if (selectedPiece === el) {
+    selectedPiece.classList.remove('selected'); selectedPiece = null;
+  } else {
+    selectedPiece.classList.remove('selected');
+    swapPieces(selectedPiece, el); selectedPiece = null;
+  }
+}
+function swapPieces(el1, el2) {
+  const idx1 = el1.dataset.index, idx2 = el2.dataset.index;
+  const row1 = Math.floor(idx2 / 3), col1 = idx2 % 3;
+  el1.style.backgroundPosition = `${col1 * 50}% ${row1 * 50}%`;
+  el1.dataset.index = idx2;
+  const row2 = Math.floor(idx1 / 3), col2 = idx1 % 3;
+  el2.style.backgroundPosition = `${col2 * 50}% ${row2 * 50}%`;
+  el2.dataset.index = idx1;
+  steps4++; stepsDisplay.textContent = steps4;
+  checkSolved4();
+}
+function checkSolved4() {
+  const currentPieces = [...puzzleBoard.children].map(el => parseInt(el.dataset.index));
+  if (isSolved(currentPieces)) {
+    puzzleBoard.classList.add('solved');
+    setTimeout(() => ticketModal.classList.add('show'), 800);
+  }
+}
+function isSolved(arr) {
+  for (let i = 0; i < arr.length; i++) { if (arr[i] !== i) return false; }
+  return true;
+}
+function enterPlanet() {
+  let progress = getProgress();
+  let completed = progress.completedGames || [];
+  if (!completed.includes(4)) completed.push(4);
+  progress.completedGames = completed;
+  saveProgress(progress);
+  
+  ticketModal.classList.remove('show');
+  document.getElementById("gamePage4").classList.remove("active");
+  document.getElementById("planetPage").classList.add("active");
+}
+
+/* ========================================
+   终极生日星球（DIY蛋糕 & 信封）
+======================================== */
+let currentBase = BASES[0].color, currentCream = CREAMS[0].color, currentDecos = [], currentCandle = CANDLES[0].css;
+
+function initDIY() {
+  const optBase = document.getElementById('optBase');
+  const optCream = document.getElementById('optCream');
+  const optDeco = document.getElementById('optDeco');
+  const optCandle = document.getElementById('optCandle');
+
+  BASES.forEach((b, i) => {
+    const btn = document.createElement('div'); btn.className = 'opt-btn' + (i === 0 ? ' selected' : '');
+    btn.style.background = b.color; btn.title = b.name;
+    btn.onclick = () => {
+      document.querySelectorAll('#optBase .opt-btn').forEach(el => el.classList.remove('selected'));
+      btn.classList.add('selected'); currentBase = b.color;
+      document.getElementById('cakeBase').style.background = currentBase;
+      document.getElementById('cakeTop').style.background = currentBase;
+    };
+    optBase.appendChild(btn);
+  });
+  CREAMS.forEach((c, i) => {
+    const btn = document.createElement('div'); btn.className = 'opt-btn' + (i === 0 ? ' selected' : '');
+    btn.style.background = c.color; btn.title = c.name;
+    btn.onclick = () => {
+      document.querySelectorAll('#optCream .opt-btn').forEach(el => el.classList.remove('selected'));
+      btn.classList.add('selected'); currentCream = c.color;
+      document.getElementById('creamBottom').style.background = currentCream;
+      document.getElementById('creamTop').style.background = currentCream;
+    };
+    optCream.appendChild(btn);
+  });
+  DECOS.forEach(d => {
+    const btn = document.createElement('div'); btn.className = 'opt-btn';
+    btn.textContent = d.icon; btn.style.background = '#fff';
+    btn.onclick = () => {
+      btn.classList.toggle('selected');
+      if (currentDecos.includes(d.id)) currentDecos = currentDecos.filter(x => x !== d.id);
+      else { if (currentDecos.length >= 4) { alert('最多放4个装饰哦～'); return; } currentDecos.push(d.id); }
+      updateDecos();
+    };
+    optDeco.appendChild(btn);
+  });
+  CANDLES.forEach((c, i) => {
+    const btn = document.createElement('div'); btn.className = 'opt-btn' + (i === 0 ? ' selected' : '');
+    btn.style.background = c.css; btn.title = c.name;
+    btn.onclick = () => {
+      document.querySelectorAll('#optCandle .opt-btn').forEach(el => el.classList.remove('selected'));
+      btn.classList.add('selected'); currentCandle = c.css;
+      document.getElementById('candleVisual').style.background = currentCandle;
+    };
+    optCandle.appendChild(btn);
+  });
+}
+function updateDecos() {
+  const layer = document.getElementById('decorLayer'); layer.innerHTML = '';
+  const positions = [{ top: '50px', left: '30px' }, { top: '60px', right: '30px' }, { top: '85px', left: '70px' }, { top: '90px', right: '70px' }];
+  currentDecos.forEach((id, index) => {
+    const data = DECOS.find(d => d.id === id);
+    if (!data) return;
+    const el = document.createElement('div'); el.className = 'deco-item'; el.textContent = data.icon;
+    el.style.top = positions[index].top; el.style.left = positions[index].left; el.style.right = positions[index].right;
+    layer.appendChild(el);
+  });
+}
+let audioContext, analyser, micStream;
+function goToWish() {
+  document.getElementById('diyArea').style.opacity = '0';
+  setTimeout(() => {
+    document.getElementById('diyArea').style.display = 'none';
+    document.getElementById('wishArea').classList.add('show');
+    setupMic();
+  }, 500);
+}
+function setupMic() {
+  const status = document.getElementById('micStatus');
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+      micStream = stream; audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser = audioContext.createAnalyser(); const source = audioContext.createMediaStreamSource(stream);
+      source.connect(analyser); analyser.fftSize = 256;
+      status.textContent = "麦克风已开启，用力吹气吧！🌬️";
+      const dataArray = new Uint8Array(analyser.frequencyBinCount);
+      function detectBlow() {
+        if (!analyser) return;
+        analyser.getByteFrequencyData(dataArray);
+        let sum = 0; for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+        if (sum / dataArray.length > 60) { blowCandle(); return; }
+        requestAnimationFrame(detectBlow);
+      }
+      detectBlow();
+    }).catch(() => { status.textContent = "麦克风权限未开启，直接点击按钮吹灭吧～"; });
+  } else { status.textContent = "当前设备不支持麦克风，直接点击按钮吹灭吧～"; }
+}
+function blowCandle() {
+  if (document.getElementById('flame').style.opacity === '0') return;
+  if (micStream) { micStream.getTracks().forEach(t => t.stop()); micStream = null; }
+  if (audioContext) { audioContext.close(); audioContext = null; }
+  document.getElementById('flame').style.opacity = '0';
+  document.getElementById('flame').style.transform = 'rotate(-45deg) scale(0)';
+  document.getElementById('wishArea').style.background = 'rgba(0,0,0,1)';
+  createFireworks();
+  setTimeout(() => { document.getElementById('letterArea').classList.add('show'); }, 2000);
+}
+function createFireworks() {
+  const colors = ['#ffbddd', '#ffe3a6', '#82cdf5', '#ffb9dc'];
+  for (let i = 0; i < 50; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div'); p.className = 'firework';
+      p.style.background = colors[Math.floor(Math.random() * colors.length)];
+      p.style.left = '50%'; p.style.top = '50%'; p.style.boxShadow = `0 0 10px ${p.style.background}`;
+      document.getElementById('letterArea').appendChild(p);
+      const angle = Math.random() * Math.PI * 2; const dist = 100 + Math.random() * 200;
+      p.animate([{ transform: 'translate(0,0) scale(1)', opacity: 1 }, { transform: `translate(${Math.cos(angle)*dist}px, ${Math.sin(angle)*dist}px) scale(0)`, opacity: 0 }], { duration: 1000 + Math.random() * 500, easing: 'cubic-bezier(0.25, 1, 0.5, 1)' }).onfinish = () => p.remove();
+    }, i * 30);
+  }
+}
+function openLetter() {
+  const env = document.getElementById('envelope');
+  env.classList.add('open');
+  setTimeout(() => {
+    env.style.display = 'none';
+    document.getElementById('letterPaper').classList.add('show');
+    typeWriter(FINAL_LETTER, 0);
+  }, 500);
+}
+function typeWriter(text, i) {
+  if (i < text.length) {
+    const char = text.charAt(i);
+    document.getElementById('letterText').innerHTML += char;
+    const paper = document.getElementById('letterPaper'); paper.scrollTop = paper.scrollHeight;
+    let speed = 40; if (char === '。' || char === '！' || char === '？' || char === '\n') speed = 150;
+    setTimeout(() => typeWriter(text, i + 1), speed); 
+  } else { 
+    document.getElementById('cursor').style.display = 'none'; 
+    document.getElementById('exitLetterBtn').classList.add('show');
+  }
+}
+
+/* ⭐ 阅后返回大厅 ⭐ */
+function exitToHall() {
+  document.getElementById("letterArea").classList.remove("show");
+  document.getElementById("planetPage").classList.remove("active");
+  
+  setTimeout(() => {
+    document.getElementById("letterArea").style.display = 'none';
+    document.getElementById("letterPaper").classList.remove("show");
+    document.getElementById("exitLetterBtn").classList.remove("show");
+    document.getElementById("letterText").innerHTML = '';
+    document.getElementById("cursor").style.display = 'inline-block';
+    document.getElementById("envelope").style.display = 'flex';
+    document.getElementById("envelope").classList.remove('open');
+    document.getElementById("diyArea").style.display = 'flex';
+    document.getElementById("diyArea").style.opacity = '1';
+    document.getElementById("wishArea").classList.remove('show');
+    document.getElementById("wishArea").style.background = 'rgba(17,17,17,0.95)';
+    document.getElementById("flame").style.opacity = '1';
+    document.getElementById("flame").style.transform = 'rotate(-45deg) scale(1)';
+    
+    document.getElementById("guidePage").classList.add("active");
+    updateGuideProgress();
+  }, 600);
+}
+
+// 启动初始化
+window.onload = () => { initDIY(); initBasketPos(); };
+</script>
+</body>
+</html>
