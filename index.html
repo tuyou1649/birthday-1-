@@ -178,20 +178,10 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 #gamePage1.active { display: flex; flex-direction: column; align-items: center; }
 #gameArea1 { flex: 1; width: 100%; max-width: 600px; position: relative; overflow: hidden; cursor: grab; touch-action: none; }
 #gameArea1:active { cursor: grabbing; }
-/* ⭐ 篮子变大变高了 ⭐ */
 #basket { 
-  width: 80px; 
-  height: 80px; 
-  position: absolute; 
-  bottom: 50px; 
-  left: 50%; 
-  font-size: 55px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  z-index: 5; 
-  pointer-events: none; 
-  filter: drop-shadow(0 0 15px #f5b9d8); 
+  width: 80px; height: 80px; position: absolute; bottom: 50px; left: 50%; 
+  font-size: 55px; display: flex; align-items: center; justify-content: center; 
+  z-index: 5; pointer-events: none; filter: drop-shadow(0 0 15px #f5b9d8); 
 }
 .item { position: absolute; top: -50px; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 30px; z-index: 4; pointer-events: none; }
 .popup-text { position: absolute; font-family: 'Press Start 2P', monospace; font-size: 14px; font-weight: bold; pointer-events: none; animation: floatUp 0.6s ease-out forwards; z-index: 6; }
@@ -301,7 +291,7 @@ button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 .cake-body .cream::after { right: 29px; top: 15px; width: 20px; height: 39px; }
 .cake-top .cream::before { left: 22px; top: 9px; width: 17px; height: 25px; border-radius: 0 0 10px 10px; }
 .cake-top .cream::after { display: none; }
-.candle { position: absolute; z-index: 7; width: 10px; height: 34px; left: 125px; top: -8px; border: 2px solid #d58cac; border-radius: 3px; background: repeating-linear-gradient(135deg,#fff 0 5px,#f4a6c5 5px 9px); transition: opacity 0.5s; }
+.candle { position: absolute; z-index: 7; width: 10px; height: 34px; left: 125px; top: -8px; border: 2px solid #d58cac; border-radius: 3px; background: repeating-linear-gradient(135deg,#fff 0 5px,#f4a6c5 5px 9px); transition: opacity 0.5s, background 0.3s; }
 .flame { position: absolute; width: 12px; height: 17px; left: -3px; top: -18px; background: #ffd36f; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 0 12px rgba(255,211,111,.65); transition: opacity 0.5s, transform 0.5s; animation: flicker 0.5s infinite alternate; }
 @keyframes flicker { from { transform: rotate(-45deg) scale(1); } to { transform: rotate(-45deg) scale(1.1); } }
 .decorations { position: absolute; inset: 0; z-index: 6; pointer-events: none; }
@@ -387,17 +377,9 @@ canvas { position: absolute; inset: 0; z-index: 2; cursor: crosshair; width: 100
 }
 .modal-window h2 { color: #ffe0f1; font-size: 20px; margin-bottom: 15px;}
 .modal-window .close { 
-  position: absolute; 
-  top: 8px; 
-  right: 12px; 
-  border: none; 
-  background: rgba(0,0,0,0.2); 
-  border-radius: 50%; 
-  width: 32px; height: 32px;
-  display: flex; align-items: center; justify-content: center;
-  color: #ffd4ed; 
-  font-size: 24px; 
-  z-index: 10;
+  position: absolute; top: 8px; right: 12px; border: none; background: rgba(0,0,0,0.2); border-radius: 50%; 
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  color: #ffd4ed; font-size: 24px; z-index: 10;
 }
 .memory-detail { padding: 15px 10px; border: 1px dashed #a780bb; color: #f3dfef; font-size: 12px; line-height: 2; text-align: left;}
 .toast { position: fixed; z-index: 300; bottom: 25px; left: 50%; transform: translateX(-50%); background: #56366e; border: 2px solid #f4b9dc; padding: 12px 18px; color: white; font-size: 12px; display: none; max-width: 85%; text-align: center; }
@@ -464,7 +446,8 @@ canvas { position: absolute; inset: 0; z-index: 2; cursor: crosshair; width: 100
         <h2 class="section-title">✦ 冒险进度 ✦</h2>
         <div class="stats">
           <div class="panel stat"><span>🎮</span><strong id="gameProgress">0/4</strong><small>冒险关卡</small></div>
-          <div class="panel stat"><span>🎟️</span><strong id="scratchProgress">0/12</strong><small>已获得刮刮乐</small></div>
+          <!-- ⭐ 这里改成了 /9 ⭐ -->
+          <div class="panel stat"><span>🎟️</span><strong id="scratchProgress">0/9</strong><small>已获得刮刮乐</small></div>
           <div class="panel stat"><span>🎁</span><strong id="giftProgress">0/6</strong><small>已发现礼物</small></div>
           <div class="panel stat clickable" onclick="openBlessingModal()">
             <span>💌</span><strong id="blessingProgress">0/3</strong><small>收到祝福 (点我查看)</small>
@@ -841,7 +824,8 @@ function updateGuideProgress() {
   const blessings = data.blessings || [];
 
   document.getElementById("gameProgress").textContent = `${completed.length}/4`;
-  document.getElementById("scratchProgress").textContent = `${scratched.length}/12`;
+  // ⭐ 上限改成了 9 ⭐
+  document.getElementById("scratchProgress").textContent = `${scratched.length}/9`;
   document.getElementById("giftProgress").textContent = `${gifts.length}/6`;
   document.getElementById("blessingProgress").textContent = `${blessings.length}/3`;
 
@@ -1541,12 +1525,14 @@ function enterPlanet() {
 ======================================== */
 let currentBase = BASES[0].color, currentCream = CREAMS[0].color, currentDecos = [], currentCandle = CANDLES[0].css;
 
+// ⭐ 修复：正确绑定装饰和蜡烛的点击事件 ⭐
 function initDIY() {
   const optBase = document.getElementById('optBase');
   const optCream = document.getElementById('optCream');
   const optDeco = document.getElementById('optDeco');
   const optCandle = document.getElementById('optCandle');
 
+  // 1. 蛋糕底色
   BASES.forEach((b, i) => {
     const btn = document.createElement('div'); btn.className = 'opt-btn' + (i === 0 ? ' selected' : '');
     btn.style.background = b.color; btn.title = b.name;
@@ -1558,6 +1544,8 @@ function initDIY() {
     };
     optBase.appendChild(btn);
   });
+
+  // 2. 奶油口味
   CREAMS.forEach((c, i) => {
     const btn = document.createElement('div'); btn.className = 'opt-btn' + (i === 0 ? ' selected' : '');
     btn.style.background = c.color; btn.title = c.name;
@@ -1569,17 +1557,25 @@ function initDIY() {
     };
     optCream.appendChild(btn);
   });
+
+  // 3. 装饰配件
   DECOS.forEach(d => {
     const btn = document.createElement('div'); btn.className = 'opt-btn';
     btn.textContent = d.icon; btn.style.background = '#fff';
     btn.onclick = () => {
       btn.classList.toggle('selected');
-      if (currentDecos.includes(d.id)) currentDecos = currentDecos.filter(x => x !== d.id);
-      else { if (currentDecos.length >= 4) { alert('最多放4个装饰哦～'); return; } currentDecos.push(d.id); }
+      if (currentDecos.includes(d.id)) {
+        currentDecos = currentDecos.filter(x => x !== d.id);
+      } else {
+        if (currentDecos.length >= 4) { alert('最多放4个装饰哦～'); return; }
+        currentDecos.push(d.id);
+      }
       updateDecos();
     };
     optDeco.appendChild(btn);
   });
+
+  // 4. 蜡烛款式
   CANDLES.forEach((c, i) => {
     const btn = document.createElement('div'); btn.className = 'opt-btn' + (i === 0 ? ' selected' : '');
     btn.style.background = c.css; btn.title = c.name;
@@ -1591,6 +1587,7 @@ function initDIY() {
     optCandle.appendChild(btn);
   });
 }
+
 function updateDecos() {
   const layer = document.getElementById('decorLayer'); layer.innerHTML = '';
   const positions = [{ top: '50px', left: '30px' }, { top: '60px', right: '30px' }, { top: '85px', left: '70px' }, { top: '90px', right: '70px' }];
@@ -1602,6 +1599,7 @@ function updateDecos() {
     layer.appendChild(el);
   });
 }
+
 let audioContext, analyser, micStream;
 function goToWish() {
   document.getElementById('diyArea').style.opacity = '0';
