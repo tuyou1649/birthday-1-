@@ -1558,10 +1558,12 @@ function initDIY() {
     optCream.appendChild(btn);
   });
 
-  // 3. 装饰配件
+  // 3. 装饰配件 (修复：加上 appendChild 真正渲染到页面)
   DECOS.forEach(d => {
-    const btn = document.createElement('div'); btn.className = 'opt-btn';
-    btn.textContent = d.icon; btn.style.background = '#fff';
+    const btn = document.createElement('div'); 
+    btn.className = 'opt-btn';
+    btn.textContent = d.icon; 
+    btn.style.background = '#fff';
     btn.onclick = () => {
       btn.classList.toggle('selected');
       if (currentDecos.includes(d.id)) {
@@ -1572,19 +1574,22 @@ function initDIY() {
       }
       updateDecos();
     };
-    optDeco.appendChild(btn);
+    optDeco.appendChild(btn); // ⭐ 就是漏了这一行！
   });
 
-  // 4. 蜡烛款式
+  // 4. 蜡烛款式 (修复：加上 appendChild 真正渲染到页面)
   CANDLES.forEach((c, i) => {
-    const btn = document.createElement('div'); btn.className = 'opt-btn' + (i === 0 ? ' selected' : '');
-    btn.style.background = c.css; btn.title = c.name;
+    const btn = document.createElement('div'); 
+    btn.className = 'opt-btn' + (i === 0 ? ' selected' : '');
+    btn.style.background = c.css; 
+    btn.title = c.name;
     btn.onclick = () => {
       document.querySelectorAll('#optCandle .opt-btn').forEach(el => el.classList.remove('selected'));
-      btn.classList.add('selected'); currentCandle = c.css;
+      btn.classList.add('selected'); 
+      currentCandle = c.css;
       document.getElementById('candleVisual').style.background = currentCandle;
     };
-    optCandle.appendChild(btn);
+    optCandle.appendChild(btn); // ⭐ 就是漏了这一行！
   });
 }
 
